@@ -32,3 +32,15 @@ class SignupForm(forms.ModelForm):
         if data['password'] != data['password_confirmation']:
             raise forms.ValidationError("Passwords do not match")
         return data['password_confirmation']
+
+
+class UserEditForm(forms.ModelForm):
+    class Meta:
+        model = get_user_model()
+        fields = ['first_name', 'last_name', 'email']
+
+
+class ProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['date_of_birth', 'photo']
