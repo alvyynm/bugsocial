@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from .forms import LoginForm, SignupForm
+from .forms import LoginForm, SignupForm, UserEditForm, ProfileEditForm
 from .models import Profile
 # Create your views here.
 
@@ -62,3 +62,23 @@ def register(request):
 
     return render(request, 'bugsocial/register.html',
                   {'user_form': user_form})
+
+
+@login_required
+def edit(request):
+    if request.method == 'POST':
+        # store data in the built in user object
+        user_form = UserEditForm(instance=request.user, data=request.POST)
+        # store profile data in the custom profile object
+        profile_form = ProfileEditForm(
+            instance=request.user.profile, data=request.POST, files=request.FILES)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            # save profile and user details in database
+            user_form.save()
+            profile_form.save()
+    else:
+        user_form = UserEditForm(instance=request.user)
+        profile_form = ProfileEditForm(instance=request.user.profile)
+    return render(request, 'bugsocial/edit.html',
+                  {'user_form': user_form, 'profile_form': profile_form})
