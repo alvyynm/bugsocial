@@ -2,13 +2,21 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{% block title %}{% endblock %}</title>
-    <link href="{% static "css/base.css" %}" rel="stylesheet">
+    <title>
+      {% block title %}
+
+      {% endblock %}
+    </title>
+    <link href="{% static 'css/base.css' %}" rel="stylesheet" />
   </head>
   <body>
     <div id="header">
       <span class="logo">BSocial</span>
     </div>
-    <div id="content">{% block content %} {% endblock %}</div>
+    <div id="content">
+      {% block content %}
+
+      {% endblock %}
+    </div>
   </body>
 </html>
