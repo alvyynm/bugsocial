@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from .forms import LoginForm
+from .forms import LoginForm, SignupForm
 # Create your views here.
 
 
@@ -38,3 +38,24 @@ def user_login(request):
 def dashboards(request):
     return render(request, 'bugsocial/dashboard.html',
                   {'section': 'dashboard'})
+
+
+def register(request):
+    if request.method == 'POST':
+        user_form = SignupForm(request.POST)
+
+        if user_form.is_valid():
+            # create a new user obj without saving
+            new_user = user_form.save(commit=False)
+            # hash the user password and set it to the new user object
+            new_user.set_password(user_form.cleaned_data['password'])
+            # save the new user
+            new_user.save()
+
+            return render(request, 'bugsocial/register_done.html',
+                          {'new_user': new_user})
+    else:
+        user_form = SignupForm()
+
+    return render(request, 'bugsocial/register.html',
+                  {'user_form': user_form})
