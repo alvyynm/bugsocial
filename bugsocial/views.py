@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 from .forms import LoginForm, SignupForm
+from .models import Profile
 # Create your views here.
 
 
@@ -52,6 +53,8 @@ def register(request):
             # save the new user
             new_user.save()
 
+            # create a corresponding profile object
+            Profile.objects.create(user=new_user)
             return render(request, 'bugsocial/register_done.html',
                           {'new_user': new_user})
     else:
