@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from bugsocial.models import Profile
 
 
 class EmailAuthBackend:
@@ -20,3 +21,13 @@ class EmailAuthBackend:
             return User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return None
+
+
+def create_profile(backend, user, *args, **kwargs):
+    """Create a new profile for social authentication
+
+    Args:
+        backend (AUNTHETICATION_BACKENDS): the social authentication backend
+        user (User): the User instance of the new or existing authenticated user
+    """
+    Profile.objects.get_or_create(user=user)
