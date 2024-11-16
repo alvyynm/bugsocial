@@ -133,3 +133,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # media upload settings for Pillow
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# set auth backends
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'bugsocial.authentication.EmailAuthBackend',
+]
