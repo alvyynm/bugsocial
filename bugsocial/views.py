@@ -30,11 +30,11 @@ def user_login(request):
                     # set the user in the session
                     login(request, user)
                     return redirect('dashboard')
-                    return HttpResponse('Authentication successful')
                 else:
-                    return HttpResponse('Account disabled')
+                    messages.error(request, 'Account disabled')
             else:
-                return HttpResponse('Invalid username or password')
+                messages.error(request, 'Invalid username or password')
+
     else:
         form = LoginForm()
 
