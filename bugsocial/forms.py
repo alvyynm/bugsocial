@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django import forms
 from django.contrib.auth import get_user_model
 
@@ -33,11 +34,45 @@ class SignupForm(forms.ModelForm):
             raise forms.ValidationError("Passwords do not match")
         return data['password_confirmation']
 
+    def clean_email(self):
+        """Prevent the user from using an existing email
+
+        Raises:
+            forms.ValidationError: Invalid email address
+
+        Returns:
+            str: email address
+        """
+        data = self.cleaned_data['email']
+
+        if User.objects.filter(email=data).exists():
+            raise forms.ValidationError('Invalid email address')
+
+        return data
+
 
 class UserEditForm(forms.ModelForm):
     class Meta:
         model = get_user_model()
         fields = ['first_name', 'last_name', 'email']
+
+    def clean_email(self):
+        """Prevent the user from changing their email address to an email address of an existing user
+
+        Raises:
+            forms.ValidationError: Invalid email address
+
+        Returns:
+            str: email address
+        """
+        data = self.cleaned_data['email']
+
+        query = User.objects.exclude(id=self.instance.id).filter(email=data)
+
+        if query.exists():
+            raise forms.ValidationError('Invalid email address')
+
+        return data
 
 
 class ProfileEditForm(forms.ModelForm):
