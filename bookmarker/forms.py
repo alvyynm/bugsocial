@@ -1,3 +1,6 @@
+import requests
+from django.core.files.base import ContentFile
+from django.utils.text import slugify
 from django import forms
 from .models import Image
 
@@ -20,3 +23,23 @@ class ImageCreateForm(forms.ModelForm):
                     'The URL does not match valid image extensions.'
                 )
             return url
+
+    def save(self, force_insert=False, force_update=False, commit=True):
+        # create a new instance of image
+        image = super().save(commit=False)
+        # retrieve the image url from form data
+        image_url = self.cleaned_data['url']
+        # create a name for the image using the slug and extension
+        name = slugify(image.title)
+        extension = image_url.rsplit('.', 1)[1].lower()
+        image_name = f'{name}.{extension}'
+        # download image from the given URL
+        response = requests.get(image_url)
+        image.image.save(
+            image_name,
+            ContentFile(response.content),
+            save=False
+        )
+        if commit:
+            image.save()
+        return image
