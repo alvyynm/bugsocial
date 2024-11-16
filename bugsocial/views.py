@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 from .forms import LoginForm, SignupForm, UserEditForm, ProfileEditForm
 from .models import Profile
@@ -9,6 +9,10 @@ from .models import Profile
 
 
 def user_login(request):
+    # if user is logged in, redirect to dashboard
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+
     if request.method == 'POST':
         form = LoginForm(request.POST)
 
@@ -42,6 +46,10 @@ def dashboards(request):
 
 
 def register(request):
+    # if user is logged in, redirect to dashboard
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+
     if request.method == 'POST':
         user_form = SignupForm(request.POST)
 
