@@ -28,6 +28,7 @@ def user_login(request):
                 if user.is_active:
                     # set the user in the session
                     login(request, user)
+                    return redirect('dashboard')
                     return HttpResponse('Authentication successful')
                 else:
                     return HttpResponse('Account disabled')
