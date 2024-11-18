@@ -8,6 +8,7 @@ cryptography==42.0.8
 cssbeautifier==1.15.1
 defusedxml==0.8.0rc2
 Django==5.0.9
+django-debug-toolbar==4.3.0
 django-extensions==3.2.3
 djlint==1.36.1
 easy-thumbnails==2.8.5
