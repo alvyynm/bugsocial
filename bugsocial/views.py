@@ -1,8 +1,8 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 
 from .forms import LoginForm, SignupForm, UserEditForm, ProfileEditForm
 from .models import Profile
@@ -96,3 +96,14 @@ def edit(request):
         profile_form = ProfileEditForm(instance=request.user.profile)
     return render(request, 'bugsocial/edit.html',
                   {'user_form': user_form, 'profile_form': profile_form})
+
+
+User = get_user_model()
+
+
+@login_required
+def user_list(request):
+    users = User.objects.filter(is_active=True)
+
+    return render(request, 'bugsocial/user/list.html',
+                  {'section': 'people', 'users': users})
