@@ -8,7 +8,7 @@
   <h1>{{ image.title }}</h1>
   {% comment %} {% load thumbnail %}
   <a href="{{ image.image.url }}"><img src="{% thumbnail image.image 300 x0 %}" class="image-detail" /></a> {% endcomment %}
-  <img src="{{ image.image.url }}" class="image-detail" />
+  <img src="{{ image.url }}" class="image-detail" />
   {% with total_likes=image.users_like.count users_like=image.users_like.all %}
     <div class="image-info">
       <div>
