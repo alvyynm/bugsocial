@@ -7,6 +7,7 @@ from django.views.decorators.http import require_POST
 
 from .forms import LoginForm, SignupForm, UserEditForm, ProfileEditForm
 from .models import Contact, Profile
+from actions.utils import create_action
 # Create your views here.
 
 
@@ -66,6 +67,8 @@ def register(request):
 
             # create a corresponding profile object
             Profile.objects.create(user=new_user)
+            # create a new action
+            create_action(new_user, 'has created an account')
             return render(request, 'bugsocial/register_done.html',
                           {'new_user': new_user})
     else:
@@ -131,6 +134,7 @@ def user_follow(request):
             if action == 'follow':
                 Contact.objects.get_or_create(
                     user_from=request.user, user_to=user)
+                create_action(request.user, 'is following', user)
             else:
                 Contact.objects.filter(
                     user_from=request.user, user_to=user).delete()
