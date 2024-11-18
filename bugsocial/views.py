@@ -1,11 +1,12 @@
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
+from django.views.decorators.http import require_POST
 
 from .forms import LoginForm, SignupForm, UserEditForm, ProfileEditForm
-from .models import Profile
+from .models import Contact, Profile
 # Create your views here.
 
 
@@ -115,3 +116,25 @@ def user_detail(request, username):
 
     return render(request, 'bugsocial/user/detail.html',
                   {'section': 'people', 'user': user})
+
+
+@require_POST
+@login_required
+def user_follow(request):
+    user_id = request.POST.get('id')
+    action = request.POST.get('action')
+
+    if user_id and action:
+        try:
+            user = User.objects.get(id=user_id)
+
+            if action == 'follow':
+                Contact.objects.get_or_create(
+                    user_from=request.user, user_to=user)
+            else:
+                Contact.objects.filter(
+                    user_from=request.user, user_to=user).delete()
+            return JsonResponse({'status': 'ok'})
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'error'})
+    return JsonResponse({'status': 'error'})
