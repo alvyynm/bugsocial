@@ -107,3 +107,11 @@ def user_list(request):
 
     return render(request, 'bugsocial/user/list.html',
                   {'section': 'people', 'users': users})
+
+
+@login_required
+def user_detail(request, username):
+    user = get_object_or_404(User, username=username, is_active=True)
+
+    return render(request, 'bugsocial/user/detail.html',
+                  {'section': 'people', 'user': user})
