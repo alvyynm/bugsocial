@@ -4,3 +4,7 @@ from django.apps import AppConfig
 class BookmarkerConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'bookmarker'
+
+    def ready(self):
+        # import the signal
+        import bookmarker.signals
