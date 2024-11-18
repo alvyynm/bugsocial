@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'social_django',
     'django_extensions',
     'bookmarker.apps.BookmarkerConfig',
+    'easy_thumbnails',
 ]
 
 MIDDLEWARE = [
