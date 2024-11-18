@@ -6,7 +6,7 @@ from django.utils import timezone
 from .models import Action
 
 
-def create_action(user, verb, target=None):
+def create_action(user, verb: str, target=None):
     """Create a new action that optionally includes a target.
     Additionally checks for the existence of similar actions to avoid duplicates
 
