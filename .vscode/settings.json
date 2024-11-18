@@ -2,5 +2,5 @@
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "editor.fontWeight": "normal",
-  "editor.defaultFormatter": "junstyle.vscode-django-support"
+  "editor.defaultFormatter": "monosans.djlint"
 }
