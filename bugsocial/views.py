@@ -7,6 +7,7 @@ from django.views.decorators.http import require_POST
 
 from .forms import LoginForm, SignupForm, UserEditForm, ProfileEditForm
 from .models import Contact, Profile
+from actions.models import Action
 from actions.utils import create_action
 # Create your views here.
 
@@ -45,8 +46,16 @@ def user_login(request):
 
 @login_required
 def dashboards(request):
+    # retrieve all the user actions except for the logged in user
+    actions = Action.objects.exclude(user=request.user)
+    following_ids = request.user.following.values_list('id', flat=True)
+
+    if following_ids:
+        # if the user is following some users, only retrieve their actions
+        actions = actions.filter(user_id__in=following_ids)
+        actions = actions[:10]
     return render(request, 'bugsocial/dashboard.html',
-                  {'section': 'dashboard'})
+                  {'section': 'dashboard', 'actions': actions})
 
 
 def register(request):
